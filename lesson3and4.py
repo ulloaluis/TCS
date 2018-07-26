@@ -238,17 +238,28 @@ for i in range(2, n+1, 2):
 #   print(i)
   
 What would you put in the following for loop to print 10, 20, 30?
-for i in range(__, __, __):
+for i in range( 10 , 31 , 10 ):
   print(i)
   
 ... to print 1, 7, 13?
-for i in range(__, __, __):
+for i in range(1,14,6):
   print(i)
 
   
 ... to print 0, -5, -10, -15, -20?
-for i in range(__, __, __):
+for i in range(0,-21,-5):
   print(i)
+  
+
+# called nested for loops
+# used a lot in graphics
+# photoshop software uses double for loops a.k.a. 
+# nested for loops to change photos. i and j represent
+# locations on a screen and you change the value in each iteration
+# (i think)
+for i in range(a, b):
+  for j in range(c, d):
+    print(i, j)
   
   
   
