@@ -1,0 +1,179 @@
+
+#!/usr/bin/env python3
+
+import random
+# import wait
+################ IDEA LIST ################
+
+## Between each shot 
+
+##
+
+##
+class Gun:
+  def __init__(self, name, damage):
+    self.name = name
+    self.damage = damage
+
+  def __repr__(self):
+    return "%s (%d damage)" % (self.name, self.damage)
+    # example: prints "AWP (100 damage)"
+
+
+class Skill:
+  def __init__(self, rank):
+    self.rank = rank # Global Elite
+    self.miss_rate = None
+    self.hs_rate = None
+
+    if rank == 'Silver':
+      self.miss_rate = 80
+      self.hs_rate = 10
+    elif rank == 'Gold Nova':
+      self.miss_rate = 50
+      self.hs_rate = 30
+    elif rank == 'Master Eagle':
+      self.miss_rate = 20
+      self.hs_rate = 50
+    elif rank == 'Global Elite':
+      self.miss_rate = 5
+      self.hs_rate = 90
+
+
+class CSGOPlayer:
+
+  # class variables
+  num_players = 0
+
+  def __init__(self, name, gun, skill):
+    self.name = name
+
+    self.hp = 100
+    self.gun = gun      # Gun class object
+    self.skill = skill # Skill class object
+
+    self.alive = True
+
+    CSGOPlayer.num_players += 1
+
+
+  def shoots(self, other): # other is going to another CSGOPlayer
+    # we shoot the other player
+    # and they lose hp equal to our gun's damage
+ 
+    if other.alive:
+      if random.randint(1, 100) > self.skill.miss_rate:
+        other.hp = other.hp - self.gun.damage
+        if other.hp <= 0:
+          other.alive = False
+
+        if not other.alive:
+          print('%s (%s) shot %s (%s) dead for %d damage' % (self.name, self.skill.rank, other.name, other.skill.rank, self.gun.damage))
+        
+        else:
+          print('%s (%s) shot %s (%s) for %d damage' % (self.name, self.skill.rank, other.name, other.skill.rank, self.gun.damage))
+        # CSGOPlayer>Gun>shoot>damage
+
+      else: # miss case
+        print('%s (%s) missed %s (%s) with %s' % (self.name, self.skill.rank, other.name, other.skill.rank, self.gun.name))
+
+ 
+
+  def __repr__(self):
+    return self.name
+
+
+
+# in_game = teamT+teamCT
+
+# print(*in_game) # prints everyone in the game
+
+
+# for person in in_game:
+#   print("%s has %d hp with a(n) %s" % (person.name, person.hp, person.gun))
+#   # print("{} has {} hp".format(person.name, person.hp))
+
+
+def team_alive(team):
+  for player in team:
+    if player.alive:
+      return True
+  return False
+
+
+def choose_alive_player(team):
+  while True:
+    player = random.choice(team)
+    if player.alive:
+      return player
+
+      
+def assign_skill(skill_levels):
+  # RETURN A SKILL CLASS OBJECT
+  ran_num = random.randint(1, 100)
+
+  # 1, 2, 3, 4, 5 (1-5) # global elite
+  # 6 - 30 (25) # master elite
+  # 31 - 80 (50) # gold nova
+  # 81-100 (20) # silver
+
+  if ran_num >= 1 and ran_num <= 5:
+    return Skill(skill_levels[3][0])
+
+  if ran_num >= 6 and ran_num <= 30:
+    return Skill(skill_levels[2][0])
+
+  if ran_num >= 31 and ran_num <= 80:
+    return Skill(skill_levels[1][0])
+  
+  if ran_num >= 81 and ran_num <= 100:
+    return Skill(skill_levels[0][0])
+
+guns = [['AWP', 100], ['AK47', 36], ['P90', 26]]
+
+
+# Player
+# Skill Level
+# Silver (20%)
+# Gold (50%)
+# Master Eagle (25%)
+# Global Elites (5%)
+
+#                   0                      1              2                        3
+skillLevel = [['Silver', 20, ], ['Gold Nova', 50], ['Master Eagle', 25], ['Global Elite', 5]]
+
+
+# GIVE EACH PLAYER A SKILL
+
+a = CSGOPlayer('(T) Player1', Gun(*random.choice(guns)), assign_skill(skillLevel))
+b = CSGOPlayer('(T) Player2', Gun(*random.choice(guns)), assign_skill(skillLevel))
+c = CSGOPlayer('(T) Player3', Gun(*random.choice(guns)), assign_skill(skillLevel))
+d = CSGOPlayer('(CT) Player4', Gun(*random.choice(guns)), assign_skill(skillLevel))
+e = CSGOPlayer('(CT) Player5', Gun(*random.choice(guns)), assign_skill(skillLevel))
+f = CSGOPlayer('(CT) Player6', Gun(*random.choice(guns)), assign_skill(skillLevel))
+
+teamT = [a, b, c]
+teamCT = [d, e, f]
+
+while True:
+  T_player = choose_alive_player(teamT)
+  CT_player = choose_alive_player(teamCT)
+  
+  if random.choice([True, False]):
+    T_player.shoots(CT_player)
+  else:
+    CT_player.shoots(T_player)
+
+  if team_alive(teamT) and not team_alive(teamCT):
+    print('T wins')
+    t_wins += 1
+    break
+  elif team_alive(teamCT) and not team_alive(teamT):
+    print('CT wins')
+    ct_wins += 1
+    break
+  elif not team_alive(teamCT) and not team_alive(teamT):
+    print('draw')
+    break
+
+print('Round over.')
