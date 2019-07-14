@@ -1,4 +1,4 @@
-from StackAndQueue.py import Stack, Queue # With StackAndQueue.py in the same directory
+from StackAndQueue import Stack, Queue # With StackAndQueue.py in the same directory
 
 # Example usages:        
 
