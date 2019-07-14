@@ -1,6 +1,7 @@
 # Stack/Queue implementations for pedagogical use.
 # Note that these implementations utilize list methods that
 # python uses to mirror stack/queue operations.
+# See: https://glot.io/snippets/fe2z3pzd1q
 class Stack:
     def __init__(self, initializers = []):
         self.stack = initializers[:]
