@@ -47,5 +47,5 @@ class Queue:
         return len(self.queue) == 0
         
     def __str__(self):
-        return "Queue(" + str(self.queue)[1:-1] + ")" # back
+        return "Queue(" + str(self.queue)[1:-1] + ")"
         
